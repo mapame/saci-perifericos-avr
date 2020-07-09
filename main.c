@@ -70,6 +70,8 @@ int main() {
 	int aux_port_num;
 	char * parameter_ptr[2];
 	
+	int fresult;
+	
 	wdt_reset();
 	wdt_enable(WDTO_1S);
 	
@@ -155,7 +157,14 @@ int main() {
 					break;
 				}
 				
-				(channel_list[aux_channel_id].r_function)((uint8_t) aux_port_num, response_buffer);
+				/* TODO: check function result and return errors */
+				fresult = (channel_list[aux_channel_id].r_function)((uint8_t) aux_port_num, response_buffer);
+				
+				if(fresult == 0) {
+					comm_send_response(cmd, "\x15""OPERATION_ERROR");
+					break;
+				}
+				
 				comm_send_response(cmd, response_buffer);
 				break;
 			case 'W':
@@ -193,10 +202,18 @@ int main() {
 					break;
 				}
 				
-				(channel_list[aux_channel_id].w_function)((uint8_t) aux_port_num, parameter_ptr[1] + 1);
+				/* TODO: check function result and return errors */
+				fresult = (channel_list[aux_channel_id].w_function)((uint8_t) aux_port_num, parameter_ptr[1] + 1);
+				
+				if(fresult == 0) {
+					comm_send_response(cmd, "\x15""OPERATION_ERROR");
+					break;
+				}
+				
 				comm_send_response(cmd, "\x06");
 				break;
 			default:
+				comm_send_response(cmd, "\x15""INVALID_OPERATION");
 				break;
 		}
 	}
