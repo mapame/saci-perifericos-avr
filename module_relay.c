@@ -21,7 +21,7 @@ typedef struct {
 	uint8_t bitmask;
 } relay_output_def_t;
 
-const char module_type[16] = "RELAY_MODULE_V1";
+const char module_type[16] = "RELAY_V1";
 const unsigned int module_channel_qty = 4;
 
 int relay_read(uint8_t port, char *result_buffer);

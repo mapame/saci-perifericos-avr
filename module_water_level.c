@@ -22,8 +22,8 @@ typedef struct {
 	uint8_t bitmask;
 } level_def_t;
 
-const char module_type[19] = "WATERLVL_MODULE_V1";
-const unsigned int module_channel_qty = 5;
+const char module_type[16] = "WATERLEVEL_V1";
+const unsigned int module_channel_qty = 6;
 
 int level_read(uint8_t port, char *result_buffer);
 
