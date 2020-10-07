@@ -44,7 +44,7 @@ static void io_init() {
 }
 
 static void timer_init() {
-	/* Configure Timer 1 in CTC mode to generate an interruption every 100ms */
+	/* Configure Timer 1 in CTC mode to generate an interruption every 20ms */
 	
 	/* Set CTC mode with ICR1 as TOP and clock as clkio/256 */
 	TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS12);
@@ -61,10 +61,10 @@ static void timer_init() {
 
 int main() {
 	uint8_t addr;
-	char content_buffer[32];
+	char content_buffer[48];
 	char cmd;
 	
-	char response_buffer[32];
+	char response_buffer[48];
 	
 	int aux_channel_id;
 	int aux_port_num;
@@ -107,7 +107,7 @@ int main() {
 		wdt_reset();
 		
 		SET_PIN(PORT, PIN_LED);
-		cmd = comm_receive_command(content_buffer, 32);
+		cmd = comm_receive_command(content_buffer, 48);
 		CLR_PIN(PORT, PIN_LED);
 		
 		_delay_ms(1);
@@ -132,6 +132,33 @@ int main() {
 				}
 				
 				sprintf(response_buffer, "%s:%u:%c:%c:%s:%s", channel_list[aux_channel_id].name, channel_list[aux_channel_id].qty, channel_list[aux_channel_id].type, (channel_list[aux_channel_id].w_function == NULL ? 'N' : 'Y'), channel_list[aux_channel_id].min, channel_list[aux_channel_id].max);
+				comm_send_response(cmd, response_buffer);
+				break;
+			case 'B':
+				if(sscanf(content_buffer, "%u", &aux_channel_id) != 1) {
+					comm_send_response(cmd, "\x15""PARAMETER_ERROR");
+					break;
+				}
+				
+				if(aux_channel_id >= module_channel_qty) {
+					comm_send_response(cmd, "\x15""INVALID_CHANNEL");
+					break;
+				}
+				
+				if(channel_list[aux_channel_id].type != 'B') {
+					comm_send_response(cmd, "\x15""CHANNEL_NOT_BINARY");
+					break;
+				}
+				
+				for(aux_port_num = 0; aux_port_num < channel_list[aux_channel_id].qty && aux_port_num < 47; aux_port_num++) {
+					fresult = (channel_list[aux_channel_id].r_function)((uint8_t) aux_port_num, &response_buffer[aux_port_num]);
+					
+					if(fresult == 0) {
+						comm_send_response(cmd, "\x15""OPERATION_ERROR");
+						break;
+					}
+				}
+				
 				comm_send_response(cmd, response_buffer);
 				break;
 			case 'R':
