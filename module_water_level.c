@@ -41,12 +41,12 @@ int input_value_ll_write(uint8_t port, const char *value_buffer);
 int input_freq_read(uint8_t port, char *result_buffer);
 
 const channel_list_t channel_list[] = {
-	{"LEVEL_VALUE",		7, 'B', 'R', "0", "1",		&level_read,			NULL},
-	{"LEVEL_PULSE_DUR",	1, 'I', 'W', "0", "9",		&level_pulse_dur_read,	&level_pulse_dur_write},
-	{"INPUT_VALUE",		1, 'B', 'R', "0", "1",		&input_value_read,		NULL},
-	{"INPUT_VALUE_HL",	1, 'B', 'W', "0", "1",		&input_value_hl_read,	&input_value_hl_write},
-	{"INPUT_VALUE_LL",	1, 'B', 'W', "0", "1",		&input_value_ll_read,	&input_value_ll_write},
-	{"INPUT_FREQ",		1, 'I', 'R', "0", "65535",	&input_freq_read,		NULL},
+	{"LEVEL_VALUE",		7, 'B', "0", "1",		&level_read,			NULL},
+	{"LEVEL_PULSE_DUR",	1, 'I', "0", "9",		&level_pulse_dur_read,	&level_pulse_dur_write},
+	{"INPUT_VALUE",		1, 'B', "0", "1",		&input_value_read,		NULL},
+	{"INPUT_VALUE_HL",	1, 'B', "0", "1",		&input_value_hl_read,	&input_value_hl_write},
+	{"INPUT_VALUE_LL",	1, 'B', "0", "1",		&input_value_ll_read,	&input_value_ll_write},
+	{"INPUT_FREQ",		1, 'I', "0", "65535",	&input_freq_read,		NULL},
 };
 
 const level_def_t level_inputs[7] = {

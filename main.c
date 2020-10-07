@@ -131,7 +131,7 @@ int main() {
 					break;
 				}
 				
-				sprintf(response_buffer, "%s:%u:%c:%c:%s:%s", channel_list[aux_channel_id].name, channel_list[aux_channel_id].qty, channel_list[aux_channel_id].type, channel_list[aux_channel_id].wr, channel_list[aux_channel_id].min, channel_list[aux_channel_id].max);
+				sprintf(response_buffer, "%s:%u:%c:%c:%s:%s", channel_list[aux_channel_id].name, channel_list[aux_channel_id].qty, channel_list[aux_channel_id].type, (channel_list[aux_channel_id].w_function == NULL ? 'N' : 'Y'), channel_list[aux_channel_id].min, channel_list[aux_channel_id].max);
 				comm_send_response(cmd, response_buffer);
 				break;
 			case 'R':
@@ -157,7 +157,6 @@ int main() {
 					break;
 				}
 				
-				/* TODO: check function result and return errors */
 				fresult = (channel_list[aux_channel_id].r_function)((uint8_t) aux_port_num, response_buffer);
 				
 				if(fresult == 0) {
@@ -192,7 +191,7 @@ int main() {
 					break;
 				}
 				
-				if(channel_list[aux_channel_id].wr == 'R') {
+				if(channel_list[aux_channel_id].w_function == NULL) {
 					comm_send_response(cmd, "\x15""CHANNEL_READ_ONLY");
 					break;
 				}
@@ -202,7 +201,6 @@ int main() {
 					break;
 				}
 				
-				/* TODO: check function result and return errors */
 				fresult = (channel_list[aux_channel_id].w_function)((uint8_t) aux_port_num, parameter_ptr[1] + 1);
 				
 				if(fresult == 0) {

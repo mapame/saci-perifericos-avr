@@ -2,7 +2,6 @@ typedef struct {
 	char name[16];
 	uint8_t qty;
 	char type;
-	char wr;
 	char min[8];
 	char max[8];
 	int (*r_function)(uint8_t, char *);

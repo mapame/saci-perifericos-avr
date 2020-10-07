@@ -37,10 +37,10 @@ int pwm_freq_read(uint8_t port, char *result_buffer);
 int pwm_freq_write(uint8_t port, const char *value_buffer);
 
 const channel_list_t channel_list[] = {
-	{"RELAY_VALUE",		8, 'B', 'W', "0", "1",		&relay_read,			&relay_write},
-	{"RELAY_TIMEOUT",	8, 'I', 'W', "0", "65535",	&relay_timeout_read,	&relay_timeout_write},
-	{"PWM_VALUE",		1, 'I', 'W', "0", "255",	&pwm_read,				&pwm_write},
-	{"PWM_FREQ",		1, 'I', 'W', "0", "7",		&pwm_freq_read,			&pwm_freq_write}
+	{"RELAY_VALUE",		8, 'B', "0", "1",		&relay_read,			&relay_write},
+	{"RELAY_TIMEOUT",	8, 'I', "0", "65535",	&relay_timeout_read,	&relay_timeout_write},
+	{"PWM_VALUE",		1, 'I', "0", "255",		&pwm_read,				&pwm_write},
+	{"PWM_FREQ",		1, 'I', "0", "7",		&pwm_freq_read,			&pwm_freq_write}
 };
 
 const relay_output_def_t relay_ouputs[8] = {
