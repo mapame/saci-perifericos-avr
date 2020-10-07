@@ -62,7 +62,7 @@ const level_def_t level_inputs[7] = {
 volatile uint8_t level_dbnc[7] = {0};
 volatile uint8_t level_value[7] = {0};
 
-volatile uint8_t level_pulse_duration = 1;
+volatile uint8_t level_pulse_duration = 0;
 
 volatile uint8_t input_dbnc = 0;
 volatile uint8_t input_value = 0;
@@ -153,9 +153,7 @@ int level_pulse_dur_write(uint8_t port, const char *value_buffer) {
 	if(sscanf(value_buffer, "%u", &dur_value) != 1)
 		return 0;
 	
-	if(dur_value < 1)
-		level_pulse_duration = 1;
-	else if(dur_value > 9)
+	if(dur_value > 9)
 		level_pulse_duration = 9;
 	else
 		level_pulse_duration = (uint8_t) dur_value;
