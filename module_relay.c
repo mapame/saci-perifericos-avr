@@ -169,15 +169,15 @@ int pwm_write(uint8_t port, const char *value_buffer) {
 	if(sscanf(value_buffer, "%u", &pwm_value) != 1)
 		return 0;
 	
-	/* Setting OCR2B to zero will not result in a true 0% duty cycle, so we must disable the waveform generation */
+	if(pwm_value >= 255)
+		OCR2B = 255;
+	else
+		OCR2B = (uint8_t) pwm_value;
+	
+	/* Setting OCR2B to zero will not result in a true 0% duty cycle, so we must also disable the waveform generation */
 	if(pwm_value == 0) {
 		CLEAR_BIT(TCCR2A, COM2B1);
 	} else {
-		if(pwm_value >= 255)
-			OCR2B = 255;
-		else
-			OCR2B = (uint8_t) pwm_value;
-		
 		SET_BIT(TCCR2A, COM2B1);
 	}
 	
